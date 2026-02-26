@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}Home | Vehicle Vault{% endblock %}
+
+{% block content %}
+
+<div class="dashboard-card" style="text-align:center;">
+    <h1>Welcome to Vehicle Vault 🚗</h1>
+    <p>Your complete vehicle management and service system.</p>
+
+    {% if user.is_authenticated %}
+        <br>
+        {% if user.role == "admin" %}
+        <a href="{% url 'admin_dashboard' %}" class="btn">Go to Dashboard</a>
+        {% elif user.role == "servicestaff" %}
+        <a href="{% url 'servicestaff_dashboard' %}" class="btn">Go to Dashboard</a>
+        {% else %}
+        <a href="{% url 'user_dashboard' %}" class="btn">Go to Dashboard</a>
+    {% endif %}
+    {% else %}
+        <br><br>
+        <a href="{% url 'login' %}" class="btn">Login</a>
+        <a href="{% url 'signup' %}" class="btn" style="margin-left:10px;">Signup</a>
+    {% endif %}
+
+    
+</div>
+
+{% endblock %}

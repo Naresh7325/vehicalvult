@@ -1,0 +1,149 @@
+/* Reset */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: #f4f6f9;
+}
+
+/* Navbar */
+.navbar {
+    background: #1e293b;
+    padding: 15px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    color: #fff;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 25px;
+}
+
+.nav-links li {
+    display: inline;
+}
+
+.nav-links a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 14px;
+    transition: 0.3s ease;
+}
+
+.nav-links a:hover {
+    color: #38bdf8;
+}
+
+/* Main Container */
+.main-container {
+    padding: 40px;
+}
+
+/* Dashboard Cards */
+.dashboard-card {
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+    margin-bottom: 20px;
+}
+
+.dashboard-title {
+    font-size: 22px;
+    margin-bottom: 20px;
+}
+
+/* Buttons */
+.btn {
+    padding: 8px 15px;
+    background: #1e293b;
+    color: white;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.btn:hover {
+    background: #38bdf8;
+}
+
+.logout-btn {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.logout-btn:hover {
+    background-color: #e60000;
+}
+
+/* Signup Section */
+.signup-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 85vh;
+}
+
+.signup-card {
+    background: white;
+    width: 420px;
+    padding: 35px;
+    border-radius: 10px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+.signup-card h2 {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.signup-card input,
+.signup-card select {
+    width: 100%;
+    padding: 8px 10px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.signup-btn {
+    width: 100%;
+    padding: 10px;
+    background: #2a5298;
+    border: none;
+    color: white;
+    font-size: 15px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.signup-btn:hover {
+    background: #1e3c72;
+}
+
+body.dark {
+    background: #121212;
+}
+
+body.dark .signup-card {
+    background: #1e1e1e;
+    color: white;
+}
+
+body.dark input {
+    background: #2a2a2a;
+    border: 1px solid #444;
+    color: white;
+}

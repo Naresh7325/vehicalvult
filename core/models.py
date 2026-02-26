@@ -38,6 +38,9 @@ class User(AbstractBaseUser):
         ('servicestaff','servicestaff'),
     )
     role = models.CharField(max_length=100,choices=role_choice,default='user')
+    firstName=models.CharField(max_length=100,null=True)
+    lastName=models.CharField(max_length=100,null=True)
+    phoneNumber=models.IntegerField(null=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)

@@ -1,180 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Signup | Vehicle Vault</title>
+{% extends 'base.html' %}
+{% load static %}
 
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, Helvetica, sans-serif;
-            transition: background 0.3s, color 0.3s;
-        }
+{% block title %}Signup | Vehicle Vault{% endblock %}
 
-        body {
-            background: linear-gradient(135deg, #fdfdfd, #fdfdfd);
-            min-height: 100vh;
-        }
+{% block content %}
 
-        /* Dark Mode */
-        body.dark {
-            background: #121212;
-        }
+<div class="signup-container">
+    <div class="signup-card">
+        <h2>Create Account</h2>
 
-        body.dark .navbar {
-            background: #1f1f1f;
-        }
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
 
-        body.dark .signup-card {
-            background: #1e1e1e;
-            color: white;
-        }
-
-        body.dark form input {
-            background: #2a2a2a;
-            border: 1px solid #444;
-            color: white;
-        }
-
-        body.dark footer {
-            background: #1f1f1f;
-        }
-
-        /* Navbar */
-        .navbar {
-            background: #000108;
-            padding: 15px 50px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            color: white;
-        }
-
-        .navbar h2 {
-            font-size: 20px;
-        }
-
-        .navbar ul {
-            list-style: none;
-            display: flex;
-            gap: 20px;
-            align-items: center;
-        }
-
-        .navbar ul li a {
-            text-decoration: none;
-            color: white;
-            font-size: 14px;
-        }
-
-        .toggle-btn {
-            padding: 5px 10px;
-            background: #e2eff2;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 12px;
-        }
-
-        /* Signup Section */
-        .signup-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 85vh;
-        }
-
-        .signup-card {
-            background: white;
-            width: 400px;
-            padding: 35px;
-            border-radius: 10px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-        }
-
-        .signup-card h2 {
-            text-align: center;
-            margin-bottom: 25px;
-        }
-
-        form p {
-            margin-bottom: 15px;
-        }
-
-        form input {
-            width: 100%;
-            padding: 8px 10px;
-            margin-top: 5px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            font-size: 14px;
-        }
-
-        .signup-btn {
-            width: 100%;
-            padding: 10px;
-            background: #2a5298;
-            border: none;
-            color: white;
-            font-size: 15px;
-            border-radius: 6px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-
-        .signup-btn:hover {
-            background: #1e3c72;
-        }
-
-        footer {
-            text-align: center;
-            padding: 15px;
-            background: #111;
-            color: white;
-            font-size: 13px;
-        }
-    </style>
-</head>
-<body>
-
-    <!-- Navbar -->
-    <div class="navbar">
-        <h2>Vehicle Vault</h2>
-        <ul>
-            {% comment %} <li><a href="#">Home</a></li>
-            <li><a href="#">Login</a></li> {% endcomment %}
-            <li><button class="toggle-btn" onclick="toggleDark()">Dark Mode</button></li>
-        </ul>
-    </div> 
-
-    <!-- Signup -->
-    <div class="signup-container">
-        <div class="signup-card">
-            <h2>Create Account</h2>
-
-            <form method="post">
-                {% csrf_token %}
-                {{ form.as_p }}
-
-                <button type="submit" class="signup-btn">
-                    Signup
-                </button>
-            </form>
-        </div>
+            <button type="submit" class="signup-btn">
+                Signup
+            </button>
+        </form>
     </div>
+</div>
 
-    <footer>
-        © 2026 Vehicle Vault | Naresh Prajapati
-    </footer> 
-
-    <!-- Dark Mode Script -->
-    <script>
-        function toggleDark() {
-            document.body.classList.toggle("dark");
-        }
-    </script>
-
-</body>
-</html>
+{% endblock %}
