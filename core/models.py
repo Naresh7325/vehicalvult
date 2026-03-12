@@ -56,3 +56,30 @@ class User(AbstractBaseUser):
     
     def __str__(self):
         return self.email
+    
+
+class Admin(models.Model):
+    userId = models.ForeignKey(User, on_delete=models.CASCADE,null=True,blank=True)#foregin key
+    admin_level = models.CharField(max_length=50)  # Super, Manager, etc.
+
+    class Meta:
+        db_table="Admin"
+
+    def __str__(self):
+        return self.userId.email
+
+
+class ServiceStaff(models.Model):
+    userId = models.ForeignKey(User, on_delete=models.CASCADE,null=True,blank=True)
+    designation = models.CharField(max_length=100)
+    experience_years = models.IntegerField()
+    salary = models.IntegerField()
+
+    class Meta:
+        db_table="ServiceStaff"
+
+    def __str__(self):
+        return self.userId.email
+    
+
+

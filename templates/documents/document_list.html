@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Documents</h2>
+
+<a href="{% url 'upload_document' %}" class="btn">Upload Document</a>
+
+<table>
+
+<tr>
+<th>Vehicle</th>
+<th>Type</th>
+<th>Number</th>
+<th>Expiry</th>
+<th>File</th>
+</tr>
+
+{% for doc in documents %}
+
+<tr>
+
+<td>{{ doc.vehicleId.vehicle_number }}</td>
+<td>{{ doc.doc_type }}</td>
+<td>{{ doc.doc_number }}</td>
+<td>{{ doc.expiry_date }}</td>
+
+<td>
+<a href="{{ doc.doc_file.url }}">View</a>
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+{% endblock %}

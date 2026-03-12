@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Parking Records</h2>
+
+<a href="{% url 'parking_entry' %}" class="btn">Add Parking</a>
+
+<table>
+
+<tr>
+<th>Vehicle</th>
+<th>Slot</th>
+<th>Entry Time</th>
+<th>Exit Time</th>
+<th>Charge</th>
+</tr>
+
+{% for p in parking %}
+
+<tr>
+<td>{{ p.vehicleId.vehicle_number }}</td>
+<td>{{ p.parking_slot }}</td>
+<td>{{ p.entry_time }}</td>
+<td>{{ p.exit_time }}</td>
+<td>{{ p.daily_charge }}</td>
+</tr>
+
+{% endfor %}
+
+</table>
+
+{% endblock %}

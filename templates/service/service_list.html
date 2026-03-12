@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Service History</h2>
+
+<a href="{% url 'add_service' %}" class="btn">Add Service</a>
+
+<table>
+
+<tr>
+<th>Vehicle</th>
+<th>Service Type</th>
+<th>Date</th>
+<th>Cost</th>
+</tr>
+
+{% for s in services %}
+
+<tr>
+
+<td>{{ s.vehicleId.vehicle_number }}</td>
+<td>{{ s.service_type }}</td>
+<td>{{ s.service_date }}</td>
+<td>{{ s.cost }}</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Transport Requests</h2>
+
+<a href="{% url 'add_transport' %}" class="btn">Add Transport</a>
+
+<table>
+
+<tr>
+<th>Vehicle</th>
+<th>From</th>
+<th>To</th>
+<th>Date</th>
+</tr>
+
+{% for t in transports %}
+
+<tr>
+
+<td>{{ t.vehicleId.vehicle_number }}</td>
+<td>{{ t.from_location }}</td>
+<td>{{ t.to_location }}</td>
+<td>{{ t.date }}</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+{% endblock %}

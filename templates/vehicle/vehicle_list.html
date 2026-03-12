@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Vehicles</h2>
+
+<a href="{% url 'add_vehicle' %}" class="btn">Add Vehicle</a>
+
+<table>
+
+<tr>
+<th>Number</th>
+<th>Type</th>
+<th>Model</th>
+<th>Color</th>
+</tr>
+
+{% for v in vehicles %}
+
+<tr>
+<td>{{ v.vehicle_number }}</td>
+<td>{{ v.vehicle_type }}</td>
+<td>{{ v.vehicle_model }}</td>
+<td>{{ v.vehicle_color }}</td>
+</tr>
+
+{% endfor %}
+
+</table>
+
+{% endblock %}
