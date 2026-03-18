@@ -1,30 +1,62 @@
-from django.shortcuts import render , redirect
+from django.shortcuts import render , redirect , get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .models import Vehicle , Documentation , ServiceDetail , Transportation , ParkingDetails 
 from .forms import VehicleForm , DocumentForm , ServiceForm , TransportForm , ParkingForm
-
-# Create your views here.
-@login_required(login_url="login") #check in core.urls.py login name should exist..
-def adminDashboardView(request):
-    return render(request,"dashboard/admin_dashboard.html")
-
+from django.contrib.auth import get_user_model
+from core.models import ServiceStaff
+## ---------------- DASHBOARD ----------------
 @login_required(login_url="login")
-def userDashboardView(request):
-    return render(request,"dashboard/user_dashboard.html")
+def dashboard(request):
 
-@login_required(login_url="login") #check in core.urls.py login name should exist..
-def servicestaffDashboardView(request):
-    return render(request,"dashboard/servicestaff_dashboard.html")
+    role = request.user.role
 
+    context = {
+        "role": role,
+        "user": request.user
+    }
+
+    # -------- ADMIN --------
+    if role == "admin":
+        context.update({
+            "total_users": User.objects.count(),
+            "total_vehicles": Vehicle.objects.count(),
+            "total_services": ServiceDetail.objects.count(),
+            "total_transport": Transportation.objects.count(),
+        })
+
+    # -------- USER --------
+    elif role == "user":
+        context.update({
+            "vehicles": Vehicle.objects.filter(userId=request.user),
+            "services": ServiceDetail.objects.filter(vehicleId__userId=request.user),
+            "transports": Transportation.objects.filter(vehicleId__userId=request.user),
+        })
+
+    # -------- STAFF --------
+    elif role == "staff":
+        try:
+            staff = ServiceStaff.objects.get(user=request.user)
+            assigned_services = ServiceDetail.objects.filter(staffId=staff)
+        except ServiceStaff.DoesNotExist:
+            assigned_services = []
+
+        context.update({
+            "assigned_services": assigned_services
+        })
+    return render(request, "dashboard/dashboard.html", context)
+@login_required(login_url="login")
 def vehicle_list(request):
 
-    vehicles = Vehicle.objects.filter(userId=request.user)
+    if request.user.role == "admin":
+        vehicles = Vehicle.objects.all()
+    else:
+        vehicles = Vehicle.objects.filter(userId=request.user)
 
     return render(request,'vehicle/vehicle_list.html',{
         'vehicles':vehicles
     })
 
-
+@login_required(login_url="login")
 def add_vehicle(request):
 
     form = VehicleForm()
@@ -34,12 +66,16 @@ def add_vehicle(request):
         form = VehicleForm(request.POST)
 
         if form.is_valid():
-            form.save()
-            return redirect('vehicle_list')
 
-    return render(request,'vehicle/add_vehicle.html',{
-        'form':form
-    })
+            vehicle = form.save(commit=False)
+
+            vehicle.userId = request.user
+
+            vehicle.save()
+
+            return redirect("vehicle_list")
+
+    return render(request,'vehicle/add_vehicle.html',{'form':form})
 
 def upload_document(request):
 
@@ -58,64 +94,146 @@ def upload_document(request):
     })
 
 
+@login_required(login_url="login")
 def document_list(request):
 
-    docs = Documentation.objects.all()
+    if request.user.role == "admin":
+        docs = Documentation.objects.all()
+    else:
+        docs = Documentation.objects.filter(vehicleId__userId=request.user)
 
-    return render(request,'documents/document_list.html',{
-        'docs':docs
+    return render(request, 'documents/document_list.html', {
+        'docs': docs
     })
 
-
+@login_required(login_url="login")
 def add_service(request):
 
-    form = ServiceForm()
-
     if request.method == "POST":
-
         form = ServiceForm(request.POST)
 
         if form.is_valid():
-            form.save()
+            service = form.save(commit=False)
+
+            # Optional: no staff assigned initially
+            service.save()
+
             return redirect('service_list')
+        else:
+            print(form.errors)
 
-    return render(request,'service/add_service.html',{
-        'form':form
-    })
+    else:
+        form = ServiceForm()
 
+        # 🔥 IMPORTANT FIX
+        form.fields['vehicleId'].queryset = Vehicle.objects.filter(userId=request.user)
 
+    return render(request, 'service/add_service.html', {'form': form})
+
+@login_required(login_url="login")
 def service_list(request):
 
-    services = ServiceDetail.objects.all()
+    if request.user.role == "admin":
+        services = ServiceDetail.objects.all()
 
-    return render(request,'service/service_list.html',{
-        'services':services
+    elif request.user.role == "staff":
+        try:
+            staff = ServiceStaff.objects.get(user=request.user)
+            services = ServiceDetail.objects.filter(staffId=staff)
+        except ServiceStaff.DoesNotExist:
+            services = []
+
+    else:
+        services = ServiceDetail.objects.filter(vehicleId__userId=request.user)
+
+    return render(request, 'service/service_list.html', {
+        'services': services
     })
+@login_required(login_url="login")
+def update_service(request, id):
 
-def add_transport(request):
+    service = get_object_or_404(ServiceDetail, id=id)
 
-    form = TransportForm()
+    if request.user.role not in ["admin", "staff"]:
+        return redirect("service_list")
 
     if request.method == "POST":
-
-        form = TransportForm(request.POST)
+        form = ServiceForm(request.POST, instance=service)
 
         if form.is_valid():
             form.save()
-            return redirect('transport_list')
+            return redirect("service_list")
 
-    return render(request,'transport/add_transport.html',{
-        'form':form
-    })
+    else:
+        form = ServiceForm(instance=service)
+
+    return render(request, "service/update_service.html", {"form": form})
+
+@login_required(login_url="login")
+def add_transport(request):
+
+    if request.method == "POST":
+        form = TransportForm(request.POST)
+
+        if form.is_valid():
+            transport = form.save(commit=False)
+            transport.userId = request.user
+            transport.save()
+            return redirect("transport_list")
+        else:
+            print("FORM ERRORS:", form.errors)
+
+    else:
+        form = TransportForm()
+
+        # 🔥 IMPORTANT
+        form.fields['vehicleId'].queryset = Vehicle.objects.filter(userId=request.user)
+
+    return render(request, "transport/add_transport.html", {"form": form})
 
 
+@login_required(login_url="login")
 def transport_list(request):
 
-    transports = Transportation.objects.all()
+    if request.user.role == "admin":
+        transports = Transportation.objects.all()
+    else:
+        transports = Transportation.objects.filter(vehicleId__userId=request.user)
 
-    return render(request,'transport/transport_list.html',{
-        'transports':transports
+    return render(request, "transport/transport_list.html", {
+        "transports": transports
     })
+
+@login_required(login_url="login")
+def update_transport(request, id):
+
+    transport = get_object_or_404(Transportation, id=id)
+
+    if request.user.role != "admin":
+        return redirect("transport_list")
+
+    if request.method == "POST":
+        form = TransportForm(request.POST, instance=transport)
+
+        if form.is_valid():
+            form.save()
+            return redirect("transport_list")
+
+    else:
+        form = TransportForm(instance=transport)
+
+    return render(request, "transport/update_transport.html", {"form": form})
+
+@login_required(login_url="login")
+def delete_transport(request, id):
+
+    transport = get_object_or_404(Transportation, id=id)
+
+    if request.user.role != "admin":
+        return redirect("transport_list")
+
+    transport.delete()
+    return redirect("transport_list")
 
 def parking_list(request):
 
@@ -141,3 +259,114 @@ def parking_entry(request):
         form = ParkingForm()
 
     return render(request, "parking/parking_entry.html", {"form": form})
+
+User = get_user_model()
+
+
+def admin_required(view_func):
+
+    def wrapper(request, *args, **kwargs):
+
+        if not request.user.is_authenticated:
+            return redirect("login")
+
+        if request.user.role != "admin":
+            return redirect("home")
+
+        return view_func(request, *args, **kwargs)
+
+    return wrapper
+
+@admin_required
+def manage_users(request):
+
+    users = User.objects.all()
+
+    return render(request,"dashboard/manage_users.html",{
+        "users":users
+    })
+
+@admin_required
+def delete_user(request, user_id):
+
+    user = User.objects.get(id=user_id)
+
+    user.delete()
+
+    return redirect("manage_users")
+
+@admin_required
+def reports(request):
+
+    total_users = User.objects.count()
+
+    total_vehicles = Vehicle.objects.count()
+
+    total_documents = Documentation.objects.count()
+
+    total_services = ServiceDetail.objects.count()
+
+    total_transport = Transportation.objects.count()
+
+    total_parking = ParkingDetails.objects.count()
+
+    context = {
+
+        "total_users":total_users,
+        "total_vehicles":total_vehicles,
+        "total_documents":total_documents,
+        "total_services":total_services,
+        "total_transport":total_transport,
+        "total_parking":total_parking,
+
+    }
+
+    return render(request,"dashboard/reports.html",context)
+
+@admin_required
+def delete_vehicle(request, id):
+
+    vehicle = Vehicle.objects.get(id=id)
+
+    vehicle.delete()
+
+    return redirect("vehicle_list")
+
+@admin_required
+def delete_document(request, id):
+
+    doc = Documentation.objects.get(id=id)
+
+    doc.delete()
+
+    return redirect("document_list")
+
+@login_required(login_url="login")
+def delete_service(request, id):
+
+    service = get_object_or_404(ServiceDetail, id=id)
+
+    if request.user.role != "admin":
+        return redirect("service_list")
+
+    service.delete()
+    return redirect("service_list")
+
+# @admin_required
+# def delete_transport(request, id):
+
+#     transport = Transportation.objects.get(id=id)
+
+#     transport.delete()
+
+#     return redirect("transport_list")
+
+@admin_required
+def delete_parking(request, id):
+
+    parking = ParkingDetails.objects.get(id=id)
+
+    parking.delete()
+
+    return redirect("parking_list")
+

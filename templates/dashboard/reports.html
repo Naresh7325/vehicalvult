@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>System Reports</h2>
+
+<div class="card-container">
+
+<div class="card">
+<h3>Total Users</h3>
+<p>{{ total_users }}</p>
+</div>
+
+<div class="card">
+<h3>Total Vehicles</h3>
+<p>{{ total_vehicles }}</p>
+</div>
+
+<div class="card">
+<h3>Total Documents</h3>
+<p>{{ total_documents }}</p>
+</div>
+
+<div class="card">
+<h3>Total Services</h3>
+<p>{{ total_services }}</p>
+</div>
+
+<div class="card">
+<h3>Total Transport</h3>
+<p>{{ total_transport }}</p>
+</div>
+
+<div class="card">
+<h3>Total Parking</h3>
+<p>{{ total_parking }}</p>
+</div>
+
+</div>
+
+{% endblock %}

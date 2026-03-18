@@ -16,7 +16,7 @@
 <th>File</th>
 </tr>
 
-{% for doc in documents %}
+{% for doc in docs %}
 
 <tr>
 
@@ -26,9 +26,16 @@
 <td>{{ doc.expiry_date }}</td>
 
 <td>
-<a href="{{ doc.doc_file.url }}">View</a>
+<a href="{{ doc.doc_file.url }}" target="_blank">View</a> |
+<a href="{{ doc.doc_file.url }}" download>Download</a>
 </td>
 
+</tr>
+
+{% empty %}
+
+<tr>
+<td colspan="5">No documents uploaded</td>
 </tr>
 
 {% endfor %}

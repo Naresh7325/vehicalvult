@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Add Transport Request</h2>
+
+<form method="POST">
+
+    {% csrf_token %}
+
+    <table>
+        {{ form.errors }}
+        <tr>
+            <td>Vehicle</td>
+            <td>{{ form.vehicleId }}</td>
+        </tr>
+
+        <tr>
+            <td>From Location</td>
+            <td>{{ form.from_location }}</td>
+        </tr>
+
+        <tr>
+            <td>To Location</td>
+            <td>{{ form.to_location }}</td>
+        </tr>
+
+        <tr>
+            <td>Date</td>
+            <td>{{ form.date }}</td>
+        </tr>
+
+    </table>
+
+    <br>
+
+    <button type="submit" >Submit Request</button>
+
+</form>
+
+<br>
+
+<a href="{% url 'transport_list' %}">Back</a>
+
+{% endblock %}

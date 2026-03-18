@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+
+<style>
+.dashboard-title {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.dashboard-card {
+    background: #f5f5f5;
+    padding: 20px;
+    margin: 15px;
+    border-radius: 10px;
+}
+
+.btn {
+    padding: 8px 15px;
+    background: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+}
+</style>
+
+<h2 class="dashboard-title">Dashboard</h2>
+
+<!-- COMMON -->
+<div class="dashboard-card">
+    <h3>Welcome, {{ user.username }}</h3>
+    <p>Email: {{ user.email }}</p>
+    <p>Role: {{ role }}</p>
+</div>
+
+<!-- ================= ADMIN ================= -->
+{% if role == "admin" %}
+
+<div class="dashboard-card">
+    <h3>System Overview</h3>
+    <p>Total Users: {{ total_users }}</p>
+    <p>Total Vehicles: {{ total_vehicles }}</p>
+    <p>Total Services: {{ total_services }}</p>
+    <p>Total Transport: {{ total_transport }}</p>
+</div>
+
+<div class="dashboard-card">
+    <a href="{% url 'manage_users' %}" class="btn">Manage Users</a>
+</div>
+
+{% endif %}
+
+<!-- ================= USER ================= -->
+{% if role == "user" %}
+
+<div class="dashboard-card">
+    <h3>Your Vehicles</h3>
+    <ul>
+        {% for v in vehicles %}
+        <li>{{ v.vehicle_number }}</li>
+        {% empty %}
+        <li>No vehicles</li>
+        {% endfor %}
+    </ul>
+</div>
+
+<div class="dashboard-card">
+    <h3>Your Services</h3>
+    <ul>
+        {% for s in services %}
+        <li>{{ s.service_type }} - {{ s.status }}</li>
+        {% empty %}
+        <li>No services</li>
+        {% endfor %}
+    </ul>
+</div>
+
+<div class="dashboard-card">
+    <h3>Your Transport</h3>
+    <ul>
+        {% for t in transports %}
+        <li>{{ t.from_location }} → {{ t.to_location }} ({{ t.status }})</li>
+        {% empty %}
+        <li>No transport requests</li>
+        {% endfor %}
+    </ul>
+</div>
+
+{% endif %}
+
+<!-- ================= STAFF ================= -->
+{% if role == "staff" %}
+
+<div class="dashboard-card">
+    <h3>Assigned Services</h3>
+
+    <table border="1" width="100%">
+        <tr>
+            <th>Vehicle</th>
+            <th>Service</th>
+            <th>Status</th>
+        </tr>
+
+        {% for s in assigned_services %}
+        <tr>
+            <td>{{ s.vehicleId.vehicle_number }}</td>
+            <td>{{ s.service_type }}</td>
+            <td>{{ s.status }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="3">No assigned services</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+{% endif %}
+
+{% endblock %}

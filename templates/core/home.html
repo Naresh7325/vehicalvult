@@ -11,11 +11,11 @@
     {% if user.is_authenticated %}
         <br>
         {% if user.role == "admin" %}
-        <a href="{% url 'admin_dashboard' %}" class="btn">Go to Dashboard</a>
+        <a href="{% url 'dashboard' %}" class="btn">Go to Dashboard</a>
         {% elif user.role == "servicestaff" %}
-        <a href="{% url 'servicestaff_dashboard' %}" class="btn">Go to Dashboard</a>
+        <a href="{% url 'dashboard' %}" class="btn">Go to Dashboard</a>
         {% else %}
-        <a href="{% url 'user_dashboard' %}" class="btn">Go to Dashboard</a>
+        <a href="{% url 'dashboard' %}" class="btn">Go to Dashboard</a>
     {% endif %}
     {% else %}
         <br><br>

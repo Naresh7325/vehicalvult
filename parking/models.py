@@ -39,23 +39,22 @@ class ParkingDetails(models.Model):
     def __str__(self):
         return f"{self.vehicleId} - {self.parking_slot}"
 
+
+
 class ServiceDetail(models.Model):
-    vehicleId= models.ForeignKey(Vehicle, on_delete=models.CASCADE, related_name='services')
-    staffId= models.ForeignKey(ServiceStaff, on_delete=models.SET_NULL, null=True, related_name='services')
+    vehicleId = models.ForeignKey("Vehicle", on_delete=models.CASCADE)
+    staffId = models.ForeignKey(ServiceStaff, on_delete=models.CASCADE)
     service_type = models.CharField(max_length=100)
     service_date = models.DateField()
     cost = models.DecimalField(max_digits=10, decimal_places=2)
-
-
-    class Meta:
-        db_table="ServiceDetail"
+    status = models.CharField(max_length=20, default="Pending")
+    service_photo = models.ImageField(upload_to="service_photos/", null=True, blank=True)
 
 class Transportation(models.Model):
-    vehicleId= models.ForeignKey(Vehicle, on_delete=models.CASCADE, related_name='transportations')
     from_location = models.CharField(max_length=100)
     to_location = models.CharField(max_length=100)
-    date = models.DateField()
-
+    date = models.DateField()   # REQUIRED
+    vehicleId = models.ForeignKey(Vehicle, on_delete=models.CASCADE)
 
     class Meta:
         db_table="Transportation"

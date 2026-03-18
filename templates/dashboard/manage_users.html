@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>Manage Users</h2>
+
+<table>
+
+<tr>
+<th>ID</th>
+<th>Email</th>
+<th>Role</th>
+<th>Action</th>
+</tr>
+
+{% for user in users %}
+
+<tr>
+
+<td>{{ user.id }}</td>
+<td>{{ user.email }}</td>
+<td>{{ user.role }}</td>
+
+<td>
+<a href="{% url 'delete_user' user.id %}" class="btn">
+Delete
+</a>
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+{% endblock %}

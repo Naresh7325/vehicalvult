@@ -13,6 +13,11 @@
 <th>Type</th>
 <th>Model</th>
 <th>Color</th>
+
+{% if user.role == "admin" %}
+<th>Action</th>
+{% endif %}
+
 </tr>
 
 {% for v in vehicles %}
@@ -22,6 +27,15 @@
 <td>{{ v.vehicle_type }}</td>
 <td>{{ v.vehicle_model }}</td>
 <td>{{ v.vehicle_color }}</td>
+
+{% if user.role == "admin" %}
+<td>
+<a href="{% url 'delete_vehicle' v.id %}" class="btn">
+Delete
+</a>
+</td>
+{% endif %}
+
 </tr>
 
 {% endfor %}

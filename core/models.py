@@ -70,16 +70,7 @@ class Admin(models.Model):
 
 
 class ServiceStaff(models.Model):
-    userId = models.ForeignKey(User, on_delete=models.CASCADE,null=True,blank=True)
-    designation = models.CharField(max_length=100)
-    experience_years = models.IntegerField()
-    salary = models.IntegerField()
-
-    class Meta:
-        db_table="ServiceStaff"
+    name = models.CharField(max_length=100)
 
     def __str__(self):
-        return self.userId.email
-    
-
-
+        return self.user.username 

@@ -17,8 +17,7 @@ class DocumentForm(forms.ModelForm):
 class ServiceForm(forms.ModelForm):
     class Meta:
         model = ServiceDetail
-        fields = '__all__'
-
+        fields = ['vehicleId', 'staffId', 'service_type', 'service_date', 'cost', 'service_photo']
 
 class TransportForm(forms.ModelForm):
     class Meta:
