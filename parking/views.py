@@ -3,13 +3,11 @@ from django.contrib.auth.decorators import login_required
 from .models import Vehicle , Documentation , ServiceDetail , Transportation , ParkingDetails 
 from .forms import VehicleForm , DocumentForm , ServiceForm , TransportForm , ParkingForm
 from django.contrib.auth import get_user_model
-from core.models import ServiceStaff
+from core.models import ServiceStaff , User
 ## ---------------- DASHBOARD ----------------
 @login_required(login_url="login")
 def dashboard(request):
-
     role = request.user.role
-
     context = {
         "role": role,
         "user": request.user
@@ -18,6 +16,7 @@ def dashboard(request):
     # -------- ADMIN --------
     if role == "admin":
         context.update({
+            "vehicles": Vehicle.objects.all(),  # Fetch ALL vehicles for Admin
             "total_users": User.objects.count(),
             "total_vehicles": Vehicle.objects.count(),
             "total_services": ServiceDetail.objects.count(),
@@ -27,7 +26,7 @@ def dashboard(request):
     # -------- USER --------
     elif role == "user":
         context.update({
-            "vehicles": Vehicle.objects.filter(userId=request.user),
+            "vehicles": Vehicle.objects.filter(userId=request.user), # Fetch OWN vehicles
             "services": ServiceDetail.objects.filter(vehicleId__userId=request.user),
             "transports": Transportation.objects.filter(vehicleId__userId=request.user),
         })
@@ -43,38 +42,31 @@ def dashboard(request):
         context.update({
             "assigned_services": assigned_services
         })
-    return render(request, "dashboard/dashboard.html", context)
+        
+    return render(request, "dashboard/dashboard.html", context)#@login_required(login_url="login")
 @login_required(login_url="login")
 def vehicle_list(request):
-
-    if request.user.role == "admin":
+    role = request.user.role # Added this line
+    if role == "admin":
         vehicles = Vehicle.objects.all()
     else:
         vehicles = Vehicle.objects.filter(userId=request.user)
 
     return render(request,'vehicle/vehicle_list.html',{
-        'vehicles':vehicles
+        'vehicles': vehicles,
+        'role': role # Pass role to template for the footer
     })
-
 @login_required(login_url="login")
 def add_vehicle(request):
-
     form = VehicleForm()
-
     if request.method == "POST":
-
-        form = VehicleForm(request.POST)
-
+        # Change this line to include request.FILES
+        form = VehicleForm(request.POST, request.FILES) 
         if form.is_valid():
-
             vehicle = form.save(commit=False)
-
             vehicle.userId = request.user
-
             vehicle.save()
-
             return redirect("vehicle_list")
-
     return render(request,'vehicle/add_vehicle.html',{'form':form})
 
 def upload_document(request):
@@ -242,27 +234,22 @@ def parking_list(request):
     return render(request, "parking/parking_list.html", {"parking": parking})
 
 
+@login_required(login_url="login") # Add this to ensure request.user exists
 def parking_entry(request):
-
     if request.method == "POST":
-
         form = ParkingForm(request.POST)
-
         if form.is_valid():
-
             form.save()
-
             return redirect("parking_list")
-
     else:
-
         form = ParkingForm()
-
-    return render(request, "parking/parking_entry.html", {"form": form})
-
-User = get_user_model()
-
-
+        # If your base.html requires 'role', add it here
+        role = getattr(request.user, 'role', 'user') 
+        
+    return render(request, "parking/parking_entry.html", {
+        "form": form,
+        "role": role
+    })
 def admin_required(view_func):
 
     def wrapper(request, *args, **kwargs):
@@ -360,13 +347,16 @@ def delete_service(request, id):
 #     transport.delete()
 
 #     return redirect("transport_list")
-
-@admin_required
+@login_required(login_url="login")
 def delete_parking(request, id):
+    parking = get_object_or_404(ParkingDetails, id=id)
 
-    parking = ParkingDetails.objects.get(id=id)
-
-    parking.delete()
-
+    # PERMISSION CHECK:
+    # 1. User is Admin
+    # 2. OR the Vehicle in the parking record belongs to the logged-in User
+    if request.user.role == "admin" or parking.vehicleId.userId == request.user:
+        parking.delete()
+        return redirect("parking_list")
+    
+    # If someone tries to delete a record they don't own
     return redirect("parking_list")
-

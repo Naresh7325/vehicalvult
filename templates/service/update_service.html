@@ -1,9 +1,41 @@
-<form method="POST" enctype="multipart/form-data">
+{% extends "base.html" %}
 
-{% csrf_token %}
+{% block content %}
+<div style="display: flex; justify-content: center; align-items: center; min-height: 85vh; padding: 20px;">
+    <div class="form-card" style="background: #1e293b; padding: 40px; border-radius: 20px; width: 100%; max-width: 550px; border: 1px solid #334155;">
+        
+        <h2 style="color: #fff; margin-bottom: 25px; text-align: center;">
+            <i class="fas fa-wrench" style="color: #3b82f6;"></i> Update Service
+        </h2>
 
-{{ form.as_p }}
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <div class="form-body" style="color: #94a3b8;">
+                {{ form.as_p }}
+            </div>
 
-<button type="submit">Update Service</button>
+            <button type="submit" class="btn-primary" style="width: 100%; padding: 14px; border-radius: 10px; font-weight: 700; border: none; margin-top: 20px; cursor: pointer; background: #3b82f6; color: white;">
+                Update Record
+            </button>
+        </form>
+        
+        <div style="text-align: center; margin-top: 20px;">
+            <a href="{% url 'service_list' %}" style="color: #94a3b8; text-decoration: none;">Cancel Update</a>
+        </div>
+    </div>
+</div>
 
-</form>
+<style>
+    form p label { display: block; margin-bottom: 8px; color: #94a3b8; font-size: 0.85rem; }
+    form p input, form p select, form p textarea {
+        width: 100%;
+        padding: 12px;
+        background: #0f172a;
+        border: 1px solid #334155;
+        color: white;
+        border-radius: 8px;
+        margin-bottom: 15px;
+    }
+</style>
+{% endblock %}

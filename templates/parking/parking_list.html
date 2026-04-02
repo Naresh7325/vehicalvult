@@ -1,33 +1,62 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div style="padding: 30px; max-width: 1200px; margin: 0 auto;">
+    
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+        <h2 style="color: #fff;"><i class="fas fa-parking" style="color: #3b82f6;"></i> Parking Management</h2>
+        <a href="{% url 'parking_entry' %}" style="background: #ffffff; color: #0f172a; padding: 12px 20px; border-radius: 10px; text-decoration: none; font-weight: 700; display: flex; align-items: center; gap: 8px;">
+            <i class="fas fa-plus"></i> Add New Entry
+        </a>
+    </div>
 
-<h2>Parking Records</h2>
+    <div style="background: #1e293b; border-radius: 16px; border: 1px solid #334155; padding: 20px; overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse; color: #cbd5e1;">
+            <thead>
+                <tr style="background: #0f172a; border-bottom: 2px solid #334155;">
+                    <th style="padding: 15px; text-align: left; color: #3b82f6; font-size: 0.85rem; text-transform: uppercase;">Vehicle</th>
+                    <th style="padding: 15px; text-align: left; color: #3b82f6; font-size: 0.85rem; text-transform: uppercase;">Slot No.</th>
+                    <th style="padding: 15px; text-align: left; color: #3b82f6; font-size: 0.85rem; text-transform: uppercase;">Entry</th>
+                    <th style="padding: 15px; text-align: left; color: #3b82f6; font-size: 0.85rem; text-transform: uppercase;">Exit</th>
+                    <th style="padding: 15px; text-align: center; color: #3b82f6; font-size: 0.85rem; text-transform: uppercase;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in parking %}
+                <tr style="border-bottom: 1px solid #334155; transition: 0.3s;">
+                    <td style="padding: 15px; color: #fff; font-weight: 600;">{{ p.vehicleId.vehicle_number }}</td>
+                    <td style="padding: 15px;"><span style="background: rgba(59, 130, 246, 0.1); color: #3b82f6; padding: 4px 10px; border-radius: 6px;">{{ p.parking_slot }}</span></td>
+                    <td style="padding: 15px; font-size: 0.9rem;">{{ p.entry_time }}</td>
+                    <td style="padding: 15px; font-size: 0.9rem;">{{ p.exit_time|default:"Occupied" }}</td>
+                    <td style="padding: 15px; text-align: center;">
+                        
+                        {% if user.role == "admin" %}
+                        <a href="{% url 'delete_parking' p.id %}" 
+                           onclick="return confirm('Permanently remove this record?')" 
+                           style="color: #ef4444; font-size: 1.1rem; margin-left: 10px;" title="Admin Delete">
+                            <i class="fas fa-trash-alt"></i>
+                        </a>
 
-<a href="{% url 'parking_entry' %}" class="btn">Add Parking</a>
+                        {% elif user.role == "user" and p.vehicleId.userId == user %}
+                        <a href="{% url 'delete_parking' p.id %}" 
+                           onclick="return confirm('Cancel this parking record?')" 
+                           style="color: #f59e0b; font-size: 1.1rem;" title="Cancel My Entry">
+                            <i class="fas fa-times-circle"></i>
+                        </a>
+                        {% endif %}
 
-<table>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="5" style="padding: 40px; text-align: center; color: #64748b;">No active parking sessions.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 
-<tr>
-<th>Vehicle</th>
-<th>Slot</th>
-<th>Entry Time</th>
-<th>Exit Time</th>
-<th>Charge</th>
-</tr>
-
-{% for p in parking %}
-
-<tr>
-<td>{{ p.vehicleId.vehicle_number }}</td>
-<td>{{ p.parking_slot }}</td>
-<td>{{ p.entry_time }}</td>
-<td>{{ p.exit_time }}</td>
-<td>{{ p.daily_charge }}</td>
-</tr>
-
-{% endfor %}
-
-</table>
-
+<style>
+    tr:hover { background: rgba(255, 255, 255, 0.02); }
+    i:hover { transform: scale(1.2); transition: 0.2s; }
+</style>
 {% endblock %}

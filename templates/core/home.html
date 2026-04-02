@@ -1,29 +1,91 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}Home | Vehicle Vault{% endblock %}
 
 {% block content %}
+<section class="hero-container">
+    <div class="hero-wrapper">
+        <div class="hero-text">
+            <span class="badge-new">Welcome to Vehicle Vault</span>
+            <h1>Manage Your Fleet <br><span class="gradient-text">With Confidence</span></h1>
+            <p>The ultimate digital vault for your vehicle documents, service history, and logistics. Secure, organized, and always accessible on any device.</p>
+            
+            <div class="hero-btns-group">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'dashboard' %}" class="btn-main">Go to Dashboard <i class="fas fa-arrow-right"></i></a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="btn-main">Get Started Free</a>
+                    <a href="{% url 'signup' %}" class="btn-outline-white">Create Account</a>
+                {% endif %}
+            </div>
+        </div>
+        <div class="hero-image">
+            <img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=800" alt="Dashboard Preview" class="img-floating">
+        </div>
+    </div>
+</section>
 
-<div class="dashboard-card" style="text-align:center;">
-    <h1>Welcome to Vehicle Vault 🚗</h1>
-    <p>Your complete vehicle management and service system.</p>
+<section class="features-section" id="features">
+    <div class="section-intro">
+        <h2>Smart Solutions for Modern Owners</h2>
+        <p>Everything you need to keep your vehicle running smoothly.</p>
+    </div>
 
-    {% if user.is_authenticated %}
-        <br>
-        {% if user.role == "admin" %}
-        <a href="{% url 'dashboard' %}" class="btn">Go to Dashboard</a>
-        {% elif user.role == "servicestaff" %}
-        <a href="{% url 'dashboard' %}" class="btn">Go to Dashboard</a>
-        {% else %}
-        <a href="{% url 'dashboard' %}" class="btn">Go to Dashboard</a>
-    {% endif %}
-    {% else %}
-        <br><br>
-        <a href="{% url 'login' %}" class="btn">Login</a>
-        <a href="{% url 'signup' %}" class="btn" style="margin-left:10px;">Signup</a>
-    {% endif %}
+    <div class="features-grid">
+        <div class="feature-card">
+            <div class="card-img-top" style="background-image: url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=400');"></div>
+            <div class="card-info">
+                <div class="icon-wrap"><i class="fas fa-shield-alt"></i></div>
+                <h3>Secure Vault</h3>
+                <p>Digital encrypted storage for RC, Insurance, and Permits.</p>
+                
+            </div>
+        </div>
 
-    
-</div>
+        <div class="feature-card">
+            <div class="card-img-top" style="background-image: url('https://images.unsplash.com/photo-1486006396113-ad7b3240821e?q=80&w=400');"></div>
+            <div class="card-info">
+                <div class="icon-wrap yellow"><i class="fas fa-tools"></i></div>
+                <h3>Service Tracking</h3>
+                <p>Automatic reminders for maintenance and engine checks.</p>
+                
+            </div>
+        </div>
 
+        <div class="feature-card">
+            <div class="card-img-top" style="background-image: url('https://images.unsplash.com/photo-1506521781263-d8422e82f27a?q=80&w=400');"></div>
+            <div class="card-info">
+                <div class="icon-wrap green"><i class="fas fa-route"></i></div>
+                <h3>Logistics</h3>
+                <p>Track your transport schedules and parking spots in real-time.</p>
+                
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="vault-details" class="detail-block">
+    <div class="detail-inner">
+        <div class="detail-text">
+            <h2><i class="fas fa-lock"></i> Digital Encryption</h2>
+            <p>Humara vault military-grade encryption use karta hai. Aapki RC aur Insurance files humesha safe rahengi. Aap kisi bhi waqt inhe download ya share kar sakte hain.</p>
+        </div>
+        <div class="detail-visual">
+             <i class="fas fa-user-shield fa-10x" style="color: #e2e8f0;"></i>
+        </div>
+    </div>
+</section>
+
+<section id="service-details" class="detail-block light-bg">
+    <div class="detail-inner invert">
+        <div class="detail-text">
+            <h2><i class="fas fa-clock"></i> Never Miss a Service</h2>
+            <p>Hamara system aapki vehicle ki age aur mileage track karta hai aur aapko sahi waqt par oil change, tire rotation, aur insurance renewal ke alerts bhejta hai.</p>
+        </div>
+        <div class="detail-visual">
+             <i class="fas fa-bell fa-10x" style="color: #cbd5e0;"></i>
+        </div>
+    </div>
+</section>
 {% endblock %}

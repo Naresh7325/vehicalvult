@@ -1,17 +1,42 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div style="display: flex; justify-content: center; align-items: center; min-height: 80vh; padding: 20px;">
+    <div class="form-card" style="background: #1e293b; padding: 40px; border-radius: 20px; width: 100%; max-width: 500px; border: 1px solid #334155;">
+        
+        <h2 style="color: #fff; margin-bottom: 25px; text-align: center;">
+            <i class="fas fa-edit" style="color: #3b82f6;"></i> Update Transport
+        </h2>
 
-<h2>Update Transport</h2>
+        <form method="POST">
+            {% csrf_token %}
+            
+            <div class="form-body" style="color: #94a3b8;">
+                {{ form.as_p }}
+            </div>
 
-<form method="POST">
+            <button type="submit" class="btn-primary" style="width: 100%; padding: 14px; border-radius: 10px; font-weight: 700; border: none; margin-top: 20px; cursor: pointer;">
+                Update Record
+            </button>
+        </form>
+        
+        <div style="text-align: center; margin-top: 20px;">
+            <a href="{% url 'transport_list' %}" style="color: #94a3b8; text-decoration: none;">Cancel</a>
+        </div>
+    </div>
+</div>
 
-{% csrf_token %}
-
-{{ form.as_p }}
-
-<button type="submit">Update</button>
-
-</form>
-
+<style>
+    /* Ensure Django's as_p fields match the dark theme */
+    form p label { display: block; margin-bottom: 8px; color: #94a3b8; }
+    form p input, form p select {
+        width: 100%;
+        padding: 12px;
+        background: #0f172a;
+        border: 1px solid #334155;
+        color: white;
+        border-radius: 8px;
+        margin-bottom: 15px;
+    }
+</style>
 {% endblock %}

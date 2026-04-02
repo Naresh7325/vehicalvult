@@ -1,25 +1,67 @@
 {% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>{% block title %}Vehicle Vault{% endblock %}</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Vehicle Vault{% endblock %}</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <script>
     function toggleDark() {
         document.body.classList.toggle("dark");
     }
 </script>
-<body>
+<body class="dark"> {% include 'navbar.html' %}
 
-    {% include 'navbar.html' %}
-
-    <div class="main-container">
+    <main class="main-container">
         {% block content %}
         {% endblock %}
-    </div>
+    </main>
 
-    
-</body>
+    <footer style="background: #1e293b; border-top: 1px solid #334155; padding: 40px 0 20px 0; margin-top: 50px; color: #94a3b8;">
+        <div style="max-width: 1400px; margin: 0 auto; padding: 0 30px;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; margin-bottom: 30px;">
+                
+                <div>
+                    <h3 style="color: #fff; display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+                        <i class="fas fa-shield-alt" style="color: #3b82f6;"></i> Vehicle Vault
+                    </h3>
+                    <p style="font-size: 0.9rem; line-height: 1.6;">
+                        The ultimate digital garage for managing your vehicle's documentation, services, and transport logistics with security and ease.
+                    </p>
+                </div>
+
+                <div>
+                    <h4 style="color: #fff; margin-bottom: 15px; font-size: 1rem;">Quick Navigation</h4>
+                    <ul style="list-style: none; padding: 0; font-size: 0.9rem;">
+                        <li style="margin-bottom: 10px;"><a href="{% url 'dashboard' %}" style="color: #94a3b8; text-decoration: none;">Dashboard</a></li>
+                        <li style="margin-bottom: 10px;"><a href="{% url 'vehicle_list' %}" style="color: #94a3b8; text-decoration: none;">My Vehicles</a></li>
+                        <li style="margin-bottom: 10px;"><a href="{% url 'service_list' %}" style="color: #94a3b8; text-decoration: none;">Services</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 style="color: #fff; margin-bottom: 15px; font-size: 1rem;">Support</h4>
+                    <p style="font-size: 0.9rem; margin-bottom: 10px;">
+                        <i class="fas fa-envelope" style="margin-right: 8px; color: #3b82f6;"></i> support@vehiclevault.com
+                    </p>
+                    <div style="display: flex; gap: 15px; font-size: 1.2rem; margin-top: 15px; color: #3b82f6;">
+                        <i class="fab fa-facebook" style="cursor: pointer;"></i>
+                        <i class="fab fa-twitter" style="cursor: pointer;"></i>
+                        <i class="fab fa-linkedin" style="cursor: pointer;"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align: center; border-top: 1px solid #334155; padding-top: 20px; font-size: 0.8rem; margin-top: 20px;">
+                <p>&copy; 2026 Vehicle Vault. All rights reserved.</p>
+                <p style="color: #3b82f6; margin-top: 5px; font-weight: 600;">{{ role|upper }} PORTAL</p>
+            </div>
+        </div>
+    </footer>
+    </body>
 </html>

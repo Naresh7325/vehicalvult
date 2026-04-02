@@ -1,36 +1,61 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
+<div class="report-container" style="padding: 40px; max-width: 1200px; margin: 0 auto;">
+    
+    <div class="report-header" style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 40px; border-bottom: 1px solid #334155; padding-bottom: 20px;">
+        <div>
+            <h2 style="color: #fff; font-size: 2rem; margin-bottom: 5px;"><i class="fas fa-users-cog"></i> Manage Users</h2>
+            <p style="color: #94a3b8;">Oversee system access and user roles.</p>
+        </div>
+    </div>
 
-<h2>Manage Users</h2>
+    <div class="report-card" style="background: #1e293b; border-radius: 16px; border: 1px solid #334155; padding: 20px; overflow-x: auto;">
+        <table class="report-table" style="width: 100%; border-collapse: collapse; color: #cbd5e1;">
+            <thead>
+                <tr style="background: #0f172a;">
+                    <th style="padding: 15px; text-align: left; color: #3b82f6; font-size: 0.85rem; text-transform: uppercase;">ID</th>
+                    <th style="padding: 15px; text-align: left; color: #3b82f6; font-size: 0.85rem; text-transform: uppercase;">Email</th>
+                    <th style="padding: 15px; text-align: left; color: #3b82f6; font-size: 0.85rem; text-transform: uppercase;">Role</th>
+                    <th style="padding: 15px; text-align: right; color: #3b82f6; font-size: 0.85rem; text-transform: uppercase;">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user_item in users %}
+                <tr style="border-bottom: 1px solid #334155; transition: background 0.3s;">
+                    <td style="padding: 15px; font-family: 'Courier New', monospace; color: #94a3b8;">#{{ user_item.id }}</td>
+                    <td style="padding: 15px; color: #fff; font-weight: 600;">{{ user_item.email }}</td>
+                    <td style="padding: 15px;">
+                        <span class="role-badge" style="background: rgba(139, 92, 246, 0.1); color: #8b5cf6; padding: 4px 10px; border-radius: 5px; font-size: 0.8rem; font-weight: 700;">
+                            {{ user_item.role|upper }}
+                        </span>
+                    </td>
+                    <td style="padding: 15px; text-align: right;">
+                        <a href="{% url 'delete_user' user_item.id %}" onclick="return confirm('Are you sure you want to delete this user?')" style="background: rgba(239, 68, 68, 0.1); color: #ef4444; padding: 8px 16px; border-radius: 8px; text-decoration: none; font-size: 0.85rem; font-weight: 600; transition: 0.3s;">
+                            <i class="fas fa-trash-alt"></i> Delete
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" style="padding: 30px; text-align: center; color: #94a3b8;">No registered users found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 
-<table>
-
-<tr>
-<th>ID</th>
-<th>Email</th>
-<th>Role</th>
-<th>Action</th>
-</tr>
-
-{% for user in users %}
-
-<tr>
-
-<td>{{ user.id }}</td>
-<td>{{ user.email }}</td>
-<td>{{ user.role }}</td>
-
-<td>
-<a href="{% url 'delete_user' user.id %}" class="btn">
-Delete
-</a>
-</td>
-
-</tr>
-
-{% endfor %}
-
-</table>
-
+<style>
+    /* Hover effect for rows */
+    .report-table tbody tr:hover {
+        background: rgba(255, 255, 255, 0.02);
+    }
+    /* Action button hover */
+    .report-card a:hover {
+        background: #ef4444 !important;
+        color: #fff !important;
+    }
+</style>
 {% endblock %}

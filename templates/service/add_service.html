@@ -1,50 +1,67 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div style="display: flex; justify-content: center; align-items: center; min-height: 85vh; padding: 20px;">
+    <div class="form-card" style="background: #1e293b; padding: 40px; border-radius: 20px; width: 100%; max-width: 550px; border: 1px solid #334155; box-shadow: 0 20px 40px rgba(0,0,0,0.4);">
+        
+        <h2 style="color: #fff; margin-bottom: 25px; text-align: center;">
+            <i class="fas fa-file-medical" style="color: #3b82f6;"></i> Add Service Record
+        </h2>
 
-<h2>Add Service Record</h2>
+        <form method="POST">
+            {% csrf_token %}
+            
+            <div class="form-grid" style="display: grid; gap: 20px;">
+                <div class="form-group">
+                    <label style="display: block; color: #94a3b8; margin-bottom: 8px; font-size: 0.85rem;">Vehicle</label>
+                    {{ form.vehicleId }}
+                </div>
 
-<form method="POST">
+                <div class="form-group">
+                    <label style="display: block; color: #94a3b8; margin-bottom: 8px; font-size: 0.85rem;">Service Staff</label>
+                    {{ form.staffId }}
+                </div>
 
-{% csrf_token %}
+                <div class="form-group">
+                    <label style="display: block; color: #94a3b8; margin-bottom: 8px; font-size: 0.85rem;">Service Type</label>
+                    {{ form.service_type }}
+                </div>
 
-<table>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="form-group">
+                        <label style="display: block; color: #94a3b8; margin-bottom: 8px; font-size: 0.85rem;">Service Date</label>
+                        {{ form.service_date }}
+                    </div>
+                    <div class="form-group">
+                        <label style="display: block; color: #94a3b8; margin-bottom: 8px; font-size: 0.85rem;">Cost ($)</label>
+                        {{ form.cost }}
+                    </div>
+                </div>
+            </div>
 
-<tr>
-<td>Vehicle</td>
-<td>{{ form.vehicleId }}</td>
-</tr>
+            <button type="submit" class="btn-primary" style="width: 100%; padding: 14px; border-radius: 10px; font-weight: 700; border: none; margin-top: 30px; cursor: pointer; background: #3b82f6; color: white;">
+                Submit Service Record
+            </button>
+        </form>
 
-<tr>
-<td>Service Staff</td>
-<td>{{ form.staffId }}</td>
-</tr>
+        <div style="text-align: center; margin-top: 20px;">
+            <a href="{% url 'service_list' %}" style="color: #94a3b8; text-decoration: none; font-size: 0.9rem;">
+                <i class="fas fa-arrow-left"></i> Back to History
+            </a>
+        </div>
+    </div>
+</div>
 
-<tr>
-<td>Service Type</td>
-<td>{{ form.service_type }}</td>
-</tr>
-
-<tr>
-<td>Service Date</td>
-<td>{{ form.service_date }}</td>
-</tr>
-
-<tr>
-<td>Cost</td>
-<td>{{ form.cost }}</td>
-</tr>
-
-</table>
-
-<br>
-
-<button type="submit" class="btn btn-success">Add Service</button>
-
-</form>
-
-<br>
-
-<a href="{% url 'service_list' %}" class="btn">Back</a>
-
+<style>
+    input, select, textarea {
+        width: 100%;
+        padding: 12px;
+        background: #0f172a !important;
+        border: 1px solid #334155 !important;
+        color: #fff !important;
+        border-radius: 8px;
+        outline: none;
+    }
+    input:focus, select:focus { border-color: #3b82f6 !important; }
+</style>
 {% endblock %}

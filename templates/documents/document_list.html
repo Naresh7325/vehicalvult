@@ -1,45 +1,57 @@
 {% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/reports.css' %}">
+{% endblock %}
 
 {% block content %}
+<div class="report-container" style="padding: 30px; max-width: 1200px; margin: 0 auto;">
+    
+    <div class="report-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 1px solid #334155; padding-bottom: 20px;">
+        <h2 style="color: #fff; display: flex; align-items: center; gap: 12px;">
+            <i class="fas fa-file-contract" style="color: #3b82f6;"></i> Document Vault
+        </h2>
+        
+        <a href="{% url 'upload_document' %}" class="btn-add-card" style="background: #ffffff !important; color: #0f172a !important; padding: 12px 20px; border-radius: 10px; text-decoration: none; font-weight: 700; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
+            <i class="fas fa-cloud-upload-alt"></i> Upload Document
+        </a>
+    </div>
 
-<h2>Documents</h2>
-
-<a href="{% url 'upload_document' %}" class="btn">Upload Document</a>
-
-<table>
-
-<tr>
-<th>Vehicle</th>
-<th>Type</th>
-<th>Number</th>
-<th>Expiry</th>
-<th>File</th>
-</tr>
-
-{% for doc in docs %}
-
-<tr>
-
-<td>{{ doc.vehicleId.vehicle_number }}</td>
-<td>{{ doc.doc_type }}</td>
-<td>{{ doc.doc_number }}</td>
-<td>{{ doc.expiry_date }}</td>
-
-<td>
-<a href="{{ doc.doc_file.url }}" target="_blank">View</a> |
-<a href="{{ doc.doc_file.url }}" download>Download</a>
-</td>
-
-</tr>
-
-{% empty %}
-
-<tr>
-<td colspan="5">No documents uploaded</td>
-</tr>
-
-{% endfor %}
-
-</table>
-
+    <div class="report-card" style="background: #1e293b; border-radius: 16px; border: 1px solid #334155; padding: 20px; overflow-x: auto;">
+        <table class="report-table" style="width: 100%; border-collapse: collapse; color: #cbd5e1;">
+            <thead>
+                <tr style="background: #0f172a;">
+                    <th style="padding: 15px; text-align: left; color: #3b82f6; font-size: 0.85rem; text-transform: uppercase;">Vehicle</th>
+                    <th style="padding: 15px; text-align: left; color: #3b82f6; font-size: 0.85rem; text-transform: uppercase;">Type</th>
+                    <th style="padding: 15px; text-align: left; color: #3b82f6; font-size: 0.85rem; text-transform: uppercase;">Number</th>
+                    <th style="padding: 15px; text-align: left; color: #3b82f6; font-size: 0.85rem; text-transform: uppercase;">Expiry Date</th>
+                    <th style="padding: 15px; text-align: right; color: #3b82f6; font-size: 0.85rem; text-transform: uppercase;">File Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for doc in docs %}
+                <tr style="border-bottom: 1px solid #334155; transition: background 0.3s;">
+                    <td style="padding: 15px; font-weight: 600; color: #fff;">{{ doc.vehicleId.vehicle_number }}</td>
+                    <td style="padding: 15px;">{{ doc.doc_type }}</td>
+                    <td style="padding: 15px; font-family: 'Courier New', monospace; color: #94a3b8;">{{ doc.doc_number }}</td>
+                    <td style="padding: 15px; color: #ef4444;">{{ doc.expiry_date }}</td>
+                    <td style="padding: 15px; text-align: right;">
+                        <a href="{{ doc.doc_file.url }}" target="_blank" style="color: #3b82f6; text-decoration: none; margin-right: 15px;" title="View">
+                            <i class="fas fa-eye"></i>
+                        </a>
+                        <a href="{{ doc.doc_file.url }}" download style="color: #10b981; text-decoration: none;" title="Download">
+                            <i class="fas fa-download"></i>
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" style="padding: 30px; text-align: center; color: #475569;">No documents found in the vault.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 {% endblock %}

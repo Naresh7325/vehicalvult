@@ -1,17 +1,90 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div style="display: flex; justify-content: center; align-items: center; min-height: 80vh; padding: 20px;">
+    <div style="background: #1e293b; padding: 40px; border-radius: 20px; width: 100%; max-width: 500px; border: 1px solid #334155; box-shadow: 0 20px 40px rgba(0,0,0,0.4);">
+        
+        <h2 style="color: #fff; margin-bottom: 30px; text-align: center; font-weight: 700;">
+            <i class="fas fa-car-side" style="color: #3b82f6; margin-right: 12px;"></i>Register Vehicle
+        </h2>
 
-<h2>Add Vehicle</h2>
+        <form method="post" enctype="multipart/form-data"> 
+            {% csrf_token %}
+            
+            <div style="color: #94a3b8;">
+                {% for field in form %}
+                    <div style="margin-bottom: 20px;">
+                        <label style="display: block; margin-bottom: 8px; font-size: 0.85rem; color: #94a3b8; font-weight: 600;">
+                            {{ field.label }}
+                        </label>
+                        
+                        {{ field }}
+                        
+                        {% if field.errors %}
+                            {% for error in field.errors %}
+                                <small style="color: #ef4444; display: block; margin-top: 5px; font-size: 0.75rem;">
+                                    <i class="fas fa-exclamation-circle"></i> {{ error }}
+                                </small>
+                            {% endfor %}
+                        {% endif %}
 
-<form method="post">
+                        {% if field.help_text %}
+                            <small style="color: #64748b; display: block; margin-top: 5px; font-size: 0.7rem;">
+                                {{ field.help_text }}
+                            </small>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
 
-{% csrf_token %}
+            <button type="submit" style="width: 100%; padding: 14px; border-radius: 10px; font-weight: 700; border: none; background: #3b82f6; color: white; cursor: pointer; transition: 0.3s; margin-top: 10px;" onmouseover="this.style.background='#2563eb'" onmouseout="this.style.background='#3b82f6'">
+                <i class="fas fa-save" style="margin-right: 8px;"></i> Save Vehicle
+            </button>
+            
+            <div style="text-align: center; margin-top: 20px;">
+                <a href="{% url 'vehicle_list' %}" style="color: #94a3b8; text-decoration: none; font-size: 0.85rem;">
+                    <i class="fas fa-arrow-left"></i> Back to List
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
 
-{{ form.as_p }}
+<style>
+    /* This CSS forces the Django-generated form inputs (like the file upload button, 
+       text inputs, and dropdowns) to match your dark dashboard theme.
+    */
+    input, select, textarea {
+        width: 100% !important;
+        padding: 12px !important;
+        background: #0f172a !important;
+        border: 1px solid #334155 !important;
+        color: #fff !important;
+        border-radius: 8px !important;
+        font-size: 0.9rem !important;
+        outline: none !important;
+        box-sizing: border-box !important;
+    }
 
-<button type="submit">Save</button>
+    input:focus, select:focus {
+        border-color: #3b82f6 !important;
+        box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2) !important;
+    }
 
-</form>
+    /* Styling for the specific 'Choose File' button */
+    input[type="file"] {
+        padding: 8px !important;
+        cursor: pointer;
+    }
 
+    input[type="file"]::-webkit-file-upload-button {
+        background: #334155;
+        border: none;
+        color: white;
+        padding: 6px 12px;
+        border-radius: 4px;
+        margin-right: 10px;
+        cursor: pointer;
+    }
+</style>
 {% endblock %}

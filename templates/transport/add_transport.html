@@ -1,45 +1,68 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div style="display: flex; justify-content: center; align-items: center; min-height: 80vh; padding: 20px;">
+    <div class="form-card" style="background: #1e293b; padding: 40px; border-radius: 20px; width: 100%; max-width: 500px; border: 1px solid #334155; box-shadow: 0 20px 40px rgba(0,0,0,0.4);">
+        
+        <h2 style="color: #fff; margin-bottom: 25px; text-align: center;">
+            <i class="fas fa-plus-circle" style="color: #3b82f6;"></i> Add Transport Request
+        </h2>
 
-<h2>Add Transport Request</h2>
+        <form method="POST">
+            {% csrf_token %}
+            
+            <div class="form-grid" style="display: grid; gap: 20px;">
+                {% if form.errors %}
+                <div style="background: rgba(239, 68, 68, 0.1); color: #ef4444; padding: 10px; border-radius: 8px; font-size: 0.9rem;">
+                    {{ form.errors }}
+                </div>
+                {% endif %}
 
-<form method="POST">
+                <div class="form-group">
+                    <label style="display: block; color: #94a3b8; margin-bottom: 8px; font-size: 0.85rem;">Select Vehicle</label>
+                    {{ form.vehicleId }}
+                </div>
 
-    {% csrf_token %}
+                <div class="form-group">
+                    <label style="display: block; color: #94a3b8; margin-bottom: 8px; font-size: 0.85rem;">From Location</label>
+                    {{ form.from_location }}
+                </div>
 
-    <table>
-        {{ form.errors }}
-        <tr>
-            <td>Vehicle</td>
-            <td>{{ form.vehicleId }}</td>
-        </tr>
+                <div class="form-group">
+                    <label style="display: block; color: #94a3b8; margin-bottom: 8px; font-size: 0.85rem;">To Location</label>
+                    {{ form.to_location }}
+                </div>
 
-        <tr>
-            <td>From Location</td>
-            <td>{{ form.from_location }}</td>
-        </tr>
+                <div class="form-group">
+                    <label style="display: block; color: #94a3b8; margin-bottom: 8px; font-size: 0.85rem;">Scheduled Date</label>
+                    {{ form.date }}
+                </div>
+            </div>
 
-        <tr>
-            <td>To Location</td>
-            <td>{{ form.to_location }}</td>
-        </tr>
+            <button type="submit" class="btn-primary" style="width: 100%; padding: 14px; border-radius: 10px; font-weight: 700; border: none; margin-top: 30px; cursor: pointer;">
+                Submit Request
+            </button>
+        </form>
 
-        <tr>
-            <td>Date</td>
-            <td>{{ form.date }}</td>
-        </tr>
+        <div style="text-align: center; margin-top: 20px;">
+            <a href="{% url 'transport_list' %}" style="color: #94a3b8; text-decoration: none; font-size: 0.9rem;">
+                <i class="fas fa-arrow-left"></i> Back to List
+            </a>
+        </div>
+    </div>
+</div>
 
-    </table>
-
-    <br>
-
-    <button type="submit" >Submit Request</button>
-
-</form>
-
-<br>
-
-<a href="{% url 'transport_list' %}">Back</a>
-
+<style>
+    /* Styling form widgets globally for this page */
+    input, select {
+        width: 100%;
+        padding: 12px;
+        background: #0f172a !important;
+        border: 1px solid #334155 !important;
+        color: #fff !important;
+        border-radius: 8px;
+        outline: none;
+    }
+    input:focus, select:focus { border-color: #3b82f6 !important; }
+</style>
 {% endblock %}

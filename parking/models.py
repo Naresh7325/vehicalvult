@@ -7,6 +7,7 @@ class Vehicle(models.Model):
     userId= models.ForeignKey(User, on_delete=models.CASCADE, related_name='vehicles')
     vehicle_number = models.CharField(max_length=20)
     vehicle_type = models.CharField(max_length=50)
+    vehicle_photo = models.ImageField(upload_to='vehicle/', null=True, blank=True)
     vehicle_color=models.CharField(max_length=100)
     vehicle_model=models.CharField(max_length=100)
 

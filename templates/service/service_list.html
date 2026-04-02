@@ -1,60 +1,68 @@
 {% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/reports.css' %}">
+{% endblock %}
 
 {% block content %}
+<div class="report-container" style="padding: 30px; max-width: 1300px; margin: 0 auto;">
+    
+    <div class="report-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 1px solid #334155; padding-bottom: 20px;">
+        <h2 style="color: #fff; display: flex; align-items: center; gap: 12px;">
+            <i class="fas fa-tools" style="color: #3b82f6;"></i> Service History
+        </h2>
+        
+        <a href="{% url 'add_service' %}" class="btn-add-card" style="background: #ffffff !important; color: #0f172a !important; padding: 12px 20px; border-radius: 10px; text-decoration: none; font-weight: 700; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
+            <i class="fas fa-plus"></i> Add Service Record
+        </a>
+    </div>
 
-<h2>Service History</h2>
-
-<a href="{% url 'add_service' %}" class="btn">Add Service</a>
-
-<table border="1">
-
-<tr>
-<th>Vehicle</th>
-<th>Service Type</th>
-<th>Date</th>
-<th>Cost</th>
-<th>Staff</th>
-<th>Action</th>
-</tr>
-
-{% for s in services %}
-
-<tr>
-
-<td>{{ s.vehicleId.vehicle_number }}</td>
-<td>{{ s.service_type }}</td>
-<td>{{ s.service_date }}</td>
-<td>{{ s.cost }}</td>
-<td>{{ s.staffId.userId.firstName }}</td>
-
-<td>
-
-{% if user.role == "admin" or user.role == "servicestaff" %}
-<a href="{% url 'update_service' s.id %}">Edit</a>
-{% endif %}
-
-{% if user.role == "admin" %}
-|
-<a href="{% url 'delete_service' s.id %}" onclick="return confirm('Delete this service?')">
-Delete
-</a>
-{% endif %}
-
-</td>
-
-</tr>
-
-{% endfor %}
-
-</table>
-<td>
-
-{% if s.service_photo %}
-<img src="{{ s.service_photo.url }}" width="80">
-{% else %}
-No Image
-{% endif %}
-
-</td>
-
+    <div class="report-card" style="background: #1e293b; border-radius: 16px; border: 1px solid #334155; padding: 20px; overflow-x: auto;">
+        <table class="report-table" style="width: 100%; border-collapse: collapse; color: #cbd5e1;">
+            <thead>
+                <tr style="background: #0f172a;">
+                    <th style="padding: 15px; text-align: left; color: #3b82f6; font-size: 0.85rem; text-transform: uppercase;">Vehicle</th>
+                    <th style="padding: 15px; text-align: left; color: #3b82f6; font-size: 0.85rem; text-transform: uppercase;">Service Type</th>
+                    <th style="padding: 15px; text-align: left; color: #3b82f6; font-size: 0.85rem; text-transform: uppercase;">Date</th>
+                    <th style="padding: 15px; text-align: left; color: #3b82f6; font-size: 0.85rem; text-transform: uppercase;">Cost</th>
+                    <th style="padding: 15px; text-align: left; color: #3b82f6; font-size: 0.85rem; text-transform: uppercase;">Staff</th>
+                    <th style="padding: 15px; text-align: center; color: #3b82f6; font-size: 0.85rem; text-transform: uppercase;">Photo</th>
+                    <th style="padding: 15px; text-align: right; color: #3b82f6; font-size: 0.85rem; text-transform: uppercase;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for s in services %}
+                <tr style="border-bottom: 1px solid #334155; transition: background 0.3s;">
+                    <td style="padding: 15px; font-weight: 600; color: #fff;">{{ s.vehicleId.vehicle_number }}</td>
+                    <td style="padding: 15px;">{{ s.service_type }}</td>
+                    <td style="padding: 15px; color: #94a3b8;">{{ s.service_date }}</td>
+                    <td style="padding: 15px; color: #10b981; font-weight: bold;">${{ s.cost }}</td>
+                    <td style="padding: 15px;">{{ s.staffId.userId.firstName }}</td>
+                    <td style="padding: 15px; text-align: center;">
+                        {% if s.service_photo %}
+                        <img src="{{ s.service_photo.url }}" style="width: 60px; height: 40px; object-fit: cover; border-radius: 4px; border: 1px solid #334155;">
+                        {% else %}
+                        <span style="color: #475569; font-size: 0.8rem;">No Image</span>
+                        {% endif %}
+                    </td>
+                    <td style="padding: 15px; text-align: right;">
+                        {% if user.role == "admin" or user.role == "servicestaff" %}
+                        <a href="{% url 'update_service' s.id %}" style="color: #3b82f6; text-decoration: none; margin-right: 10px;"><i class="fas fa-edit"></i></a>
+                        {% endif %}
+                        
+                        {% if user.role == "admin" %}
+                        <a href="{% url 'delete_service' s.id %}" onclick="return confirm('Delete this service?')" style="color: #ef4444; text-decoration: none;"><i class="fas fa-trash"></i></a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" style="padding: 30px; text-align: center; color: #94a3b8;">No service history available.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 {% endblock %}

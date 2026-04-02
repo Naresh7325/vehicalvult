@@ -1,45 +1,69 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div class="vault-table-container" style="padding: 30px; max-width: 1200px; margin: 0 auto;">
+    
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+        <h2 style="color: #fff; font-size: 1.8rem; margin: 0;">
+            <i class="fas fa-car" style="color: #3b82f6; margin-right: 12px;"></i>
+            {% if role == "admin" %}All Registered Vehicles{% else %}My Vehicles{% endif %}
+        </h2>
+        <a href="{% url 'add_vehicle' %}" style="background: #ffffff; color: #0f172a; padding: 12px 24px; border-radius: 10px; text-decoration: none; font-weight: 700; display: flex; align-items: center; gap: 8px;">
+            <i class="fas fa-plus"></i> Add Vehicle
+        </a>
+    </div>
 
-<h2>Vehicles</h2>
-
-<a href="{% url 'add_vehicle' %}" class="btn">Add Vehicle</a>
-
-<table>
-
-<tr>
-<th>Number</th>
-<th>Type</th>
-<th>Model</th>
-<th>Color</th>
-
-{% if user.role == "admin" %}
-<th>Action</th>
-{% endif %}
-
-</tr>
-
-{% for v in vehicles %}
-
-<tr>
-<td>{{ v.vehicle_number }}</td>
-<td>{{ v.vehicle_type }}</td>
-<td>{{ v.vehicle_model }}</td>
-<td>{{ v.vehicle_color }}</td>
-
-{% if user.role == "admin" %}
-<td>
-<a href="{% url 'delete_vehicle' v.id %}" class="btn">
-Delete
-</a>
-</td>
-{% endif %}
-
-</tr>
-
-{% endfor %}
-
-</table>
-
+    <div style="background: #1e293b; border-radius: 16px; border: 1px solid #334155; padding: 10px; overflow-x: auto;">
+        <table class="vault-table">
+            <thead>
+                <tr style="background: #0f172a;">
+                    <th class="col-photo" style="color: #3b82f6;">Photo</th>
+                    <th class="col-number" style="color: #3b82f6;">Vehicle Number</th>
+                    <th class="col-type" style="color: #3b82f6;">Type</th>
+                    <th class="col-model" style="color: #3b82f6;">Model</th>
+                    {% if role == "admin" %}
+                    <th class="col-owner" style="color: #3b82f6;">Owner</th>
+                    <th class="col-action" style="color: #3b82f6;">Actions</th>
+                    {% endif %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for v in vehicles %}
+                <tr style="transition: 0.3s;" onmouseover="this.style.background='rgba(255,255,255,0.02)'" onmouseout="this.style.background='transparent'">
+                    <td class="col-photo">
+                        {% if v.vehicle_photo %}
+                            <img src="{{ v.vehicle_photo.url }}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 8px;">
+                        {% else %}
+                            <div style="width: 50px; height: 50px; background: #0f172a; border-radius: 8px; display: flex; align-items: center; justify-content: center; border: 1px dashed #475569;">
+                                <i class="fas fa-camera" style="color: #475569;"></i>
+                            </div>
+                        {% endif %}
+                    </td>
+                    <td class="col-number" style="color: #fff; font-weight: 600;">{{ v.vehicle_number }}</td>
+                    <td class="col-type">
+                        <span class="badge-type">{{ v.vehicle_type|upper }}</span>
+                    </td>
+                    <td class="col-model" style="color: #94a3b8;">{{ v.vehicle_model }}</td>
+                    
+                    {% if role == "admin" %}
+                    <td class="col-owner" style="color: #cbd5e1;">{{ v.userId.username }}</td>
+                    <td class="col-action">
+                        <a href="{% url 'delete_vehicle' v.id %}" onclick="return confirm('Delete?')" style="color: #ef4444;">
+                            <i class="fas fa-trash-alt"></i>
+                        </a>
+                    </td>
+                    {% endif %}
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="{% if role == 'admin' %}6{% else %}4{% endif %}" style="padding: 60px; text-align: center; color: #64748b;">
+                        No vehicles found.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 {% endblock %}
+
