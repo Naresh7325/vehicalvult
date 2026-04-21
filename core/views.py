@@ -6,6 +6,7 @@ from django.core.mail import EmailMultiAlternatives
 from django.conf import settings
 from pathlib import Path
 from django.template.loader import render_to_string
+from django.contrib import messages
 
 # import your models
 from parking.models import Vehicle, ServiceDetail, Transportation
@@ -26,28 +27,42 @@ def userSignupView(request):
 
         if form.is_valid():
             user = form.save()
-            email = form.cleaned_data['email']
 
-            # HTML Email
+            # ✅ Get data
+            email = form.cleaned_data.get('email')
+            username = form.cleaned_data.get('username')
+
+            # 🔥 OPTIONAL: restrict multiple admin
+            if user.role == 'admin':
+                from .models import User
+                if User.objects.filter(role='admin').exclude(id=user.id).exists():
+                    user.delete()
+                    messages.error(request, "Only one admin is allowed.")
+                    return redirect('signup')
+
+            # ✅ HTML Email
             html_content = render_to_string(
                 "welcome_email.html",
-                {"user_name": user.email}
+                {"user_name": username}   # ✅ FIXED
             )
 
             email_message = EmailMultiAlternatives(
                 subject="Welcome to Vehicle Vault 🚗",
-                body="Thank you for registering.",
+                body=f"Hello {username}, Thank you for registering.",
                 from_email=settings.EMAIL_HOST_USER,
                 to=[email],
             )
 
             email_message.attach_alternative(html_content, "text/html")
 
+            # ✅ Attach file (optional)
             file_path = Path(settings.BASE_DIR) / "image.png"
             if file_path.exists():
                 email_message.attach_file(file_path)
 
             email_message.send(fail_silently=False)
+
+            messages.success(request, "Account created successfully!")
 
             return redirect('login')
 
@@ -57,27 +72,30 @@ def userSignupView(request):
     else:
         form = UserSignupForm()
         return render(request, 'core/signup.html', {'form': form})
-
-
 # ---------------- LOGIN ----------------
 def userLoginView(request):
     if request.method == "POST":
         form = UserLoginForm(request.POST)
 
         if form.is_valid():
-            email = form.cleaned_data['email']
-            password = form.cleaned_data['password']
+            username = form.cleaned_data.get('username')   # ✅ use username
+            password = form.cleaned_data.get('password')
 
-            user = authenticate(request, email=email, password=password)
+            user = authenticate(request, username=username, password=password)  # ✅ correct
 
-            if user:
+            if user is not None:
                 login(request, user)
 
-                # ✅ SINGLE DASHBOARD
+                # 🔥 ROLE BASED REDIRECT (optional but useful)
+                
                 return redirect("dashboard")
 
             else:
-                return redirect("login")
+                # ❌ invalid login
+                return render(request, 'core/login.html', {
+                    'form': form,
+                    'error': 'Invalid username or password'
+                })
 
         else:
             return render(request, 'core/login.html', {'form': form})
@@ -85,7 +103,6 @@ def userLoginView(request):
     else:
         form = UserLoginForm()
         return render(request, 'core/login.html', {'form': form})
-
 
 # ---------------- LOGOUT ----------------
 def userLogoutView(request):

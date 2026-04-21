@@ -202,7 +202,13 @@ body {
     text-align: center;
     border: 1px solid var(--border);
     box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    /* ... keep your existing code here ... */
+    
+    margin-left: auto;  /* Pushes from the left */
+    margin-right: auto; /* Pushes from the right */
+    margin-top: 50px;   /* Adds some space from the navbar */
 }
+
 
 .signup-card input, .signup-card select {
     width: 100%;
@@ -874,4 +880,19 @@ html { scroll-behavior: smooth; }
     font-size: 0.75rem;
     font-weight: 700;
     border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+input[type="datetime-local"] {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid #334155;
+    background: #0f172a;
+    color: #fff;
+    font-size: 14px;
+}
+
+input[type="datetime-local"]:focus {
+    border-color: #3b82f6;
+    outline: none;
 }

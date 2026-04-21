@@ -12,7 +12,19 @@
             {% csrf_token %}
             
             <div class="form-body" style="color: #94a3b8;">
-                {{ form.as_p }}
+                {{ form.errors }}
+
+                <p>From Location</p>
+                {{ form.from_location }}
+
+                <p>To Location</p>
+                {{ form.to_location }}
+
+                <p>Date</p>
+                {{ form.date }}
+
+                <p>Vehicle</p>
+                {{ form.vehicleId }}
             </div>
 
             <button type="submit" class="btn-primary" style="width: 100%; padding: 14px; border-radius: 10px; font-weight: 700; border: none; margin-top: 20px; cursor: pointer;">

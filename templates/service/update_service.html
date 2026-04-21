@@ -2,40 +2,100 @@
 
 {% block content %}
 <div style="display: flex; justify-content: center; align-items: center; min-height: 85vh; padding: 20px;">
-    <div class="form-card" style="background: #1e293b; padding: 40px; border-radius: 20px; width: 100%; max-width: 550px; border: 1px solid #334155;">
-        
-        <h2 style="color: #fff; margin-bottom: 25px; text-align: center;">
-            <i class="fas fa-wrench" style="color: #3b82f6;"></i> Update Service
+
+    <div style="
+        background: #1e293b;
+        padding: 40px;
+        border-radius: 20px;
+        width: 100%;
+        max-width: 500px;
+        border: 1px solid #334155;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    ">
+
+        <!-- Title -->
+        <h2 style="color: #fff; text-align: center; margin-bottom: 25px;">
+            <i class="fas fa-sync-alt" style="color:#3b82f6;"></i> Update Service Status
         </h2>
 
-        <form method="POST" enctype="multipart/form-data">
+        <!-- Form -->
+        <form method="POST">
             {% csrf_token %}
-            
-            <div class="form-body" style="color: #94a3b8;">
-                {{ form.as_p }}
-            </div>
 
-            <button type="submit" class="btn-primary" style="width: 100%; padding: 14px; border-radius: 10px; font-weight: 700; border: none; margin-top: 20px; cursor: pointer; background: #3b82f6; color: white;">
-                Update Record
+            <!-- Service Name -->
+            <p style="color:#94a3b8; margin-bottom: 15px;">
+                <strong>Service:</strong> {{ service.service_type }}
+            </p>
+
+            <!-- Dropdown -->
+            <label style="color:#cbd5f5; font-size:14px;">Select Status</label>
+
+            <select name="status" required style="
+                width: 100%;
+                padding: 12px;
+                margin-top: 8px;
+                border-radius: 10px;
+                border: 1px solid #475569;
+                background: #0f172a;
+                color: #fff;
+                font-size: 14px;
+                outline: none;
+                transition: 0.3s;
+            "
+            onfocus="this.style.borderColor='#3b82f6'"
+            onblur="this.style.borderColor='#475569'">
+
+                <option value="pending" {% if service.status == 'pending' %}selected{% endif %}>
+                    Pending
+                </option>
+
+                <option value="in_progress" {% if service.status == 'in_progress' %}selected{% endif %}>
+                    In Progress
+                </option>
+
+                <option value="completed" {% if service.status == 'completed' %}selected{% endif %}>
+                    Completed
+                </option>
+
+            </select>
+
+            <!-- Button -->
+            <button type="submit" style="
+                width: 100%;
+                margin-top: 25px;
+                padding: 12px;
+                border: none;
+                border-radius: 12px;
+                background: linear-gradient(135deg, #3b82f6, #6366f1);
+                color: white;
+                font-size: 16px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                box-shadow: 0 10px 20px rgba(59,130,246,0.3);
+            "
+            onmouseover="this.style.transform='scale(1.05)'"
+            onmouseout="this.style.transform='scale(1)'">
+
+                Update Status
             </button>
         </form>
-        
-        <div style="text-align: center; margin-top: 20px;">
-            <a href="{% url 'service_list' %}" style="color: #94a3b8; text-decoration: none;">Cancel Update</a>
+
+        <!-- Cancel Link -->
+        <div style="text-align:center; margin-top:20px;">
+            <a href="{% url 'service_list' %}" style="
+                color:#94a3b8;
+                text-decoration:none;
+                font-size:14px;
+                transition:0.3s;
+            "
+            onmouseover="this.style.color='#fff'"
+            onmouseout="this.style.color='#94a3b8'">
+
+                Cancel
+            </a>
         </div>
+
     </div>
 </div>
-
-<style>
-    form p label { display: block; margin-bottom: 8px; color: #94a3b8; font-size: 0.85rem; }
-    form p input, form p select, form p textarea {
-        width: 100%;
-        padding: 12px;
-        background: #0f172a;
-        border: 1px solid #334155;
-        color: white;
-        border-radius: 8px;
-        margin-bottom: 15px;
-    }
-</style>
 {% endblock %}

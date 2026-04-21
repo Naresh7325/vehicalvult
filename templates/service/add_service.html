@@ -13,55 +13,37 @@
             
             <div class="form-grid" style="display: grid; gap: 20px;">
                 <div class="form-group">
-                    <label style="display: block; color: #94a3b8; margin-bottom: 8px; font-size: 0.85rem;">Vehicle</label>
+                    <label style="color: #94a3b8;">Vehicle</label>
                     {{ form.vehicleId }}
                 </div>
 
                 <div class="form-group">
-                    <label style="display: block; color: #94a3b8; margin-bottom: 8px; font-size: 0.85rem;">Service Staff</label>
-                    {{ form.staffId }}
-                </div>
-
-                <div class="form-group">
-                    <label style="display: block; color: #94a3b8; margin-bottom: 8px; font-size: 0.85rem;">Service Type</label>
+                    <label style="color: #94a3b8;">Service Type</label>
                     {{ form.service_type }}
                 </div>
 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                     <div class="form-group">
-                        <label style="display: block; color: #94a3b8; margin-bottom: 8px; font-size: 0.85rem;">Service Date</label>
+                        <label style="color: #94a3b8;">Service Date</label>
                         {{ form.service_date }}
                     </div>
                     <div class="form-group">
-                        <label style="display: block; color: #94a3b8; margin-bottom: 8px; font-size: 0.85rem;">Cost ($)</label>
+                        <label style="color: #94a3b8;">Cost</label>
                         {{ form.cost }}
                     </div>
                 </div>
             </div>
 
-            <button type="submit" class="btn-primary" style="width: 100%; padding: 14px; border-radius: 10px; font-weight: 700; border: none; margin-top: 30px; cursor: pointer; background: #3b82f6; color: white;">
+            <button type="submit" class="btn-primary" style="width: 100%; margin-top: 30px;">
                 Submit Service Record
             </button>
         </form>
 
         <div style="text-align: center; margin-top: 20px;">
-            <a href="{% url 'service_list' %}" style="color: #94a3b8; text-decoration: none; font-size: 0.9rem;">
-                <i class="fas fa-arrow-left"></i> Back to History
+            <a href="{% url 'service_list' %}" style="color: #94a3b8;">
+                ← Back to History
             </a>
         </div>
     </div>
 </div>
-
-<style>
-    input, select, textarea {
-        width: 100%;
-        padding: 12px;
-        background: #0f172a !important;
-        border: 1px solid #334155 !important;
-        color: #fff !important;
-        border-radius: 8px;
-        outline: none;
-    }
-    input:focus, select:focus { border-color: #3b82f6 !important; }
-</style>
 {% endblock %}

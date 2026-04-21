@@ -29,6 +29,7 @@
                     <th style="padding: 15px; text-align: left; color: #3b82f6; font-size: 0.85rem; text-transform: uppercase;">Staff</th>
                     <th style="padding: 15px; text-align: center; color: #3b82f6; font-size: 0.85rem; text-transform: uppercase;">Photo</th>
                     <th style="padding: 15px; text-align: right; color: #3b82f6; font-size: 0.85rem; text-transform: uppercase;">Actions</th>
+                    <th style="padding: 15px; text-align: right; color: #3b82f6; font-size: 0.85rem; text-transform: uppercase;">Status</th>
                 </tr>
             </thead>
             <tbody>
@@ -54,6 +55,20 @@
                         {% if user.role == "admin" %}
                         <a href="{% url 'delete_service' s.id %}" onclick="return confirm('Delete this service?')" style="color: #ef4444; text-decoration: none;"><i class="fas fa-trash"></i></a>
                         {% endif %}
+                    </td>
+                    <td style="padding: 15px;">
+                        <span style="
+                            padding: 5px 10px;
+                            border-radius: 6px;
+                            font-size: 0.8rem;
+                            background:
+                            {% if s.status == 'completed' %}#10b981
+                            {% elif s.status == 'in_progress' %}#f59e0b
+                            {% else %}#64748b
+                            {% endif %};
+                            color: white;">
+                            {{ s.get_status_display }}
+                        </span>
                     </td>
                 </tr>
                 {% empty %}

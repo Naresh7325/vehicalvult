@@ -43,6 +43,8 @@ path("document/delete/<int:id>/", views.delete_document, name="delete_document")
 
 path("parking/delete/<int:id>/", views.delete_parking, name="delete_parking"),
 
+path('forgot-password/', views.forgot_password, name='forgot_password'),
+
 
 ]
 

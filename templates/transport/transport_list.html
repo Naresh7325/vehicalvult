@@ -13,32 +13,51 @@
             <i class="fas fa-truck-moving" style="color: #3b82f6;"></i> Transport Requests
         </h2>
         
-        <a href="{% url 'add_transport' %}" class="btn-add-card" style="background: #ffffff !important; color: #0f172a !important; padding: 12px 20px; border-radius: 10px; text-decoration: none; font-weight: 700; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
-            <i class="fas fa-plus"></i> Add Transport
+        <a href="{% url 'add_transport' %}" class="btn-add-card" style="background: #ffffff; color: #0f172a; padding: 12px 20px; border-radius: 10px; text-decoration: none; font-weight: 700;">
+            + Add Transport
         </a>
     </div>
 
     <div class="report-card" style="background: #1e293b; border-radius: 16px; border: 1px solid #334155; padding: 20px; overflow-x: auto;">
-        <table class="report-table" style="width: 100%; border-collapse: collapse; color: #cbd5e1;">
+        <table style="width: 100%; border-collapse: collapse; color: #cbd5e1;">
             <thead>
                 <tr style="background: #0f172a;">
-                    <th style="padding: 15px; text-align: left; color: #3b82f6; font-size: 0.85rem; text-transform: uppercase;">Vehicle</th>
-                    <th style="padding: 15px; text-align: left; color: #3b82f6; font-size: 0.85rem; text-transform: uppercase;">From Location</th>
-                    <th style="padding: 15px; text-align: left; color: #3b82f6; font-size: 0.85rem; text-transform: uppercase;">To Location</th>
-                    <th style="padding: 15px; text-align: left; color: #3b82f6; font-size: 0.85rem; text-transform: uppercase;">Scheduled Date</th>
+                    <th style="padding: 15px;">Vehicle</th>
+                    <th style="padding: 15px;">From</th>
+                    <th style="padding: 15px;">To</th>
+                    <th style="padding: 15px;">Date</th>
+                    <th style="padding: 15px;">Actions</th> <!-- ✅ NEW -->
                 </tr>
             </thead>
+
             <tbody>
                 {% for t in transports %}
-                <tr style="border-bottom: 1px solid #334155; transition: background 0.3s;">
-                    <td style="padding: 15px; font-weight: 600; color: #fff;">{{ t.vehicleId.vehicle_number }}</td>
+                <tr style="border-bottom: 1px solid #334155;">
+                    <td style="padding: 15px; color: #fff;">{{ t.vehicleId.vehicle_number }}</td>
                     <td style="padding: 15px;">{{ t.from_location }}</td>
                     <td style="padding: 15px;">{{ t.to_location }}</td>
-                    <td style="padding: 15px; color: #94a3b8;">{{ t.date }}</td>
+                    <td style="padding: 15px;">{{ t.date }}</td>
+
+                    <!-- ✅ ACTION BUTTONS -->
+                    <td style="padding: 15px;">
+                        <a href="{% url 'update_transport' t.id %}" 
+                           style="color: #3b82f6; margin-right: 10px; text-decoration: none;">
+                           Edit
+                        </a>
+
+                        <a href="{% url 'delete_transport' t.id %}" 
+                           style="color: red; text-decoration: none;"
+                           onclick="return confirm('Are you sure?')">
+                           Delete
+                        </a>
+                    </td>
                 </tr>
+
                 {% empty %}
                 <tr>
-                    <td colspan="4" style="padding: 30px; text-align: center; color: #94a3b8;">No transport requests found.</td>
+                    <td colspan="5" style="padding: 30px; text-align: center;">
+                        No transport requests found.
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>

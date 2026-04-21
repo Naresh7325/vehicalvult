@@ -15,7 +15,6 @@
             <thead>
                 <tr style="background: #0f172a; border-bottom: 2px solid #334155;">
                     <th style="padding: 15px; text-align: left; color: #3b82f6; font-size: 0.85rem; text-transform: uppercase;">Vehicle</th>
-                    <th style="padding: 15px; text-align: left; color: #3b82f6; font-size: 0.85rem; text-transform: uppercase;">Slot No.</th>
                     <th style="padding: 15px; text-align: left; color: #3b82f6; font-size: 0.85rem; text-transform: uppercase;">Entry</th>
                     <th style="padding: 15px; text-align: left; color: #3b82f6; font-size: 0.85rem; text-transform: uppercase;">Exit</th>
                     <th style="padding: 15px; text-align: center; color: #3b82f6; font-size: 0.85rem; text-transform: uppercase;">Actions</th>
@@ -25,7 +24,6 @@
                 {% for p in parking %}
                 <tr style="border-bottom: 1px solid #334155; transition: 0.3s;">
                     <td style="padding: 15px; color: #fff; font-weight: 600;">{{ p.vehicleId.vehicle_number }}</td>
-                    <td style="padding: 15px;"><span style="background: rgba(59, 130, 246, 0.1); color: #3b82f6; padding: 4px 10px; border-radius: 6px;">{{ p.parking_slot }}</span></td>
                     <td style="padding: 15px; font-size: 0.9rem;">{{ p.entry_time }}</td>
                     <td style="padding: 15px; font-size: 0.9rem;">{{ p.exit_time|default:"Occupied" }}</td>
                     <td style="padding: 15px; text-align: center;">
